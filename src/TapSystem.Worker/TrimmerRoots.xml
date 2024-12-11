@@ -1,0 +1,13 @@
+<linker>
+  <assembly fullname="TapSystem.Worker">
+    <type fullname="TapSystem.Worker.Program" preserve="all"/>
+    <type fullname="TapSystem.Worker.Services.*" preserve="all"/>
+  </assembly>
+  <assembly fullname="Oracle.ManagedDataAccess.Core" preserve="all"/>
+  <assembly fullname="Microsoft.Extensions.Hosting" preserve="all"/>
+  <assembly fullname="Microsoft.Extensions.Configuration.Json" preserve="all"/>
+  <assembly fullname="Microsoft.Extensions.Options" preserve="all"/>
+  <assembly fullname="Microsoft.Extensions.DependencyInjection" preserve="all"/>
+  <assembly fullname="Microsoft.Extensions.Configuration" preserve="all"/>
+  <assembly fullname="Microsoft.Extensions.Logging" preserve="all"/>
+</linker>

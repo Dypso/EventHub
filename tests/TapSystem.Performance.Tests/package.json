@@ -1,0 +1,8 @@
+{
+  "name": "tapsystem-performance-tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node bombardier-test.js"
+  }
+}

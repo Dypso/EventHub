@@ -1,0 +1,68 @@
+services:
+  oracle:
+    image: gvenzl/oracle-free:latest
+    environment:
+      - ORACLE_PASSWORD=YourStrongPassword123!
+      - ORACLE_DATABASE=TAPDB
+    ports:
+      - "1521:1521"
+    networks:
+      - tap_network      
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ../init-scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "/opt/oracle/healthcheck.sh"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  api:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/api.dockerfile
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - OracleAq__ConnectionString=Data Source=oracle:1521/TAPDB;User Id=tapuser;Password=TapUser123!;Connection Timeout=60;Pooling=true;Min Pool Size=10;Max Pool Size=100;
+    depends_on:
+      oracle:
+        condition: service_healthy
+    networks:
+      - tap_network        
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 4G
+        reservations:
+          cpus: '2'
+          memory: 2G
+  # worker:
+  #   build:
+  #     context: ../..
+  #     dockerfile: deploy/docker/worker.dockerfile
+  #   environment:
+  #     - DOTNET_ENVIRONMENT=Performance
+  #     - OracleAq__ConnectionString=Data Source=oracle:1521/TAPDB;User Id=tapuser;Password=TapUser123!;
+  #   depends_on:
+  #     oracle:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ../../output:/app/output
+
+networks:
+  tap_network:
+    driver: bridge
+    
+volumes:
+  oracle-data:

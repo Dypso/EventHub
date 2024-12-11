@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+
+    <EnablePreviewFeatures>true</EnablePreviewFeatures>
+    
+    <!-- AOT Optimizations -->
+    <PublishAot>true</PublishAot>
+    <PublishTrimmed>true</PublishTrimmed>
+    <EnableDynamicLoading>false</EnableDynamicLoading>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <OptimizationPreference>Speed</OptimizationPreference>
+    <IlcOptimizationPreference>Speed</IlcOptimizationPreference>
+    <TrimMode>full</TrimMode>
+    
+    <!-- Debug settings -->
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    
+    <!-- Prevent conflicts -->
+    <StripSymbols>true</StripSymbols>
+  </PropertyGroup>
+
+  <!-- Required root assemblies for trimming -->
+  <ItemGroup>
+    <TrimmerRootAssembly Include="TapSystem.Worker" />
+    <TrimmerRootAssembly Include="TapSystem.Shared" />
+  </ItemGroup>
+
+  <!-- Root descriptors for trimming -->
+  <ItemGroup>
+    <RdXmlFile Include="rd.xml" />
+  </ItemGroup>
+
+
+
+  <!-- Package references -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.130" />
+  </ItemGroup>
+
+  <!-- Project references -->
+  <ItemGroup>
+    <ProjectReference Include="..\TapSystem.Shared\TapSystem.Shared.csproj" />
+  </ItemGroup>
+
+  <!-- Trim warnings -->
+  <ItemGroup>
+    <TrimmerRootDescriptor Include="TrimmerRoots.xml" />
+  </ItemGroup>
+</Project>
